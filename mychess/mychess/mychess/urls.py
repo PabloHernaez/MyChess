@@ -24,5 +24,10 @@ from rest_framework import routers
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("auth/", include('djoser.urls')),
+    #Setting the user info data
+    path("api/v1/", include('djoser.urls')),
+    #Setting the tokens
+    path("api/v1/", include('djoser.urls.authtoken')),
+    #myViews
+    path("api/v1/", include('authentication.urls')),
 ]

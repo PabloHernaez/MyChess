@@ -4,10 +4,10 @@ import uuid
 
 # Create your models here.
 
-
+"""
 class Player(AbstractUser):
 
-    rating = models.IntegerField(max_length=4, help_text="The rate of the player")
+    rating = models.IntegerField( help_text="The rate of the player")
 
     class Meta:
         ordering = ["rating"]
@@ -33,7 +33,6 @@ class ChessGame():
     end_time = models.DateField(max_length=11, help_text="La fecha a la que se creo la partida", null=True, blank=True)
 
 class ChessMove():
-
-
-
-AUTH_USER_MODEL = "models.Player"
+    pass
+    
+"""
