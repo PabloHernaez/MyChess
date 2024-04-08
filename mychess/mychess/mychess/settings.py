@@ -11,6 +11,20 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+
+if 'RENDER' in os.environ:
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+else:
+    SECRET_KEY = os.environ.get('SECRET_KEY', default='your_secret_key')
+
+
+if 'DEBUG' in os.environ:
+    DEBUG = os.environ.get('DEBUG').lower() in ['true', 't', '1']
+else:
+    DEBUG = 'REDER' not in os.environ
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,12 +39,18 @@ SECRET_KEY = "django-insecure-$s$adoiykgpz=hp8q$cz2a)nhf4x@y0p5%8d8g9i^j!!j(a%n$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    #"daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -43,10 +63,11 @@ INSTALLED_APPS = [
     "models",
     "corsheaders",
     "djoser",
-    "daphne",
-    "channels",
-    "chat_prueba",
+    #"channels",
+    #"chat_prueba",
 ]
+
+AUTH_USER_MODEL='models.Player'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -66,6 +87,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "models.apps.ModelsConfig",
+    "authentication.apps.AuthenticationConfig"
 ]
 
 ROOT_URLCONF = "mychess.urls"
@@ -86,19 +109,30 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "mychess.wsgi.application"
+#WSGI_APPLICATION = "mychess.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DATABASES = {}
 
+
+LOCALPOSTGRES = 'postgresql://alumnodb:alumnodb@localhost:5432/psi' #AQUI LA BASE DE DATOS LOCAL QUE TENDREMOS
+import dj_database_url
+
+if 'TESTING' in os.environ:
+    databaseenv = dj_database_url.parse(
+        LOCALPOSTGRES, conn_max_age=600
+    )
+else:
+    databaseenv = dj_database_url.parse(
+        LOCALPOSTGRES, conn_max_age=600
+    ) #AQUI AÑADIR LA BASE DE DATOS DE NEONTECH
+
+DATABASES['default'] = databaseenv
+
+AUTH_USER_MODEL = "models.Player"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -137,6 +171,7 @@ DJOSER = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://127.0.0.1:8000",
 ]
 
 
@@ -152,7 +187,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-ASGI_APPLICATION = 'chat_project.asgi.application'
+#ASGI_APPLICATION = 'chat_project.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {

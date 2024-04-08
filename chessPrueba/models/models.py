@@ -8,7 +8,6 @@ import uuid
 class Player(AbstractUser):
 
     rating = models.IntegerField( help_text="The rate of the player", default=0)
-    name = models.CharField(help_text="The name of the player", max_length=40)
 
     class Meta:
         ordering = ["rating"]
@@ -16,6 +15,8 @@ class Player(AbstractUser):
     def __str__(self):
 
         return self.name
+   
+
 
 
 class ChessGame(models.Model):
@@ -31,9 +32,9 @@ class ChessGame(models.Model):
     start_time = models.DateField(max_length=11, help_text="La fecha a la que se creo la partida")
     end_time = models.DateField(max_length=11, help_text="La fecha a la que se creo la partida", null=True, blank=True)
     timeControl = models.IntegerField(help_text="The ammount of time that each player have to make a move")
-    blackPlayer = models.ForeignKey('Player', on_delete=models.RESTRICT)
-    whitePlayer =  models.ForeignKey('Player', on_delete=models.RESTRICT)
-    winner = models.ForeignKey('Player', null=True, on_delete=models.RESTRICT)
+    blackPlayer = models.ForeignKey('Player', on_delete=models.RESTRICT, related_name="black_layer")
+    whitePlayer =  models.ForeignKey('Player', on_delete=models.RESTRICT, related_name="white_player")
+    winner = models.ForeignKey('Player', null=True, on_delete=models.RESTRICT, related_name="winner")
 
     def __str__(self):
         return self.board_state
