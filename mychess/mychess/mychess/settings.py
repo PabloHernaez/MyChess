@@ -111,9 +111,6 @@ CHANNEL_LAYERS = {
 }
 
 
-database = dj_database_url.parse(
-    'postgresql://alumnodb:alumnodb@localhost:5432/psi', conn_max_age=600
-)
 
 DATABASES = {
     'default': {
@@ -122,9 +119,23 @@ DATABASES = {
     }
 }
 
-DATABASES['default'].update(database)
+LOCALPOSTGRES = 'postgresql://alumnodb:alumnodb@localhost:5432/psi'
 
+NEONTECH = 'postgresql://pablohernaezdelgado:paoIbA7K4hiC@ep-long-fire-a25uol2t.eu-central-1.aws.neon.tech/mychess?sslmode=require'
 
+if 'TESTING' in os.environ:
+    databaseenv = dj_database_url.config(
+        LOCALPOSTGRES,
+        conn_max_age=600,
+    )
+    
+else:
+    databaseenv = dj_database_url.parse(
+        NEONTECH, 
+        conn_max_age=600
+    )
+
+DATABASES['default'].update(databaseenv)
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
