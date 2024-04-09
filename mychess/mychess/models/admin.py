@@ -1,9 +1,7 @@
-"""from django.contrib import admin
-from .models import ChessGame, ChessMove, Player
+from django.contrib import admin
+from .models import Player, ChessGame, ChessMove
 
 # Register your models here.
-
-
-admin.site.register(ChessMove)
+admin.site.register(Player)
 admin.site.register(ChessGame)
-admin.site.register(Player)"""
+admin.site.register(ChessMove)
