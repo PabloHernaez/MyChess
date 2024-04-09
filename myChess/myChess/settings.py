@@ -118,7 +118,6 @@ DATABASES = {
     }
 }
 
-
 LOCALPOSTGRES = 'postgresql://alumnodb:alumnodb@localhost:5432/psi'
 
 NEONTECH = 'postgresql://pablohernaezdelgado:paoIbA7K4hiC@ep-long-fire-a25uol2t.eu-central-1.aws.neon.tech/mychess?sslmode=require'
@@ -136,7 +135,6 @@ else:
     )
 
 DATABASES['default'].update(databaseenv)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
