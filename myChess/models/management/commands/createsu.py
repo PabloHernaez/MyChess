@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand
+#Introducir aqui el nuevo modelo de datos de usuario para que funcione
 
 
 class Command(BaseCommand):
